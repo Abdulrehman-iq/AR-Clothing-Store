@@ -1,0 +1,85 @@
+.navbar {
+    position: fixed; /* Keeps the navbar fixed at the top */
+    top: 0;
+    left: 0;
+    width: 98%; /* Ensures the navbar spans the full width of the page */
+    background-color: white; /* Adjust as per your design */
+    z-index: 1000; /* Ensures it stays above other elements */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  }
+  
+  .navbar.scrolled {
+    background-color: #f8f8f8; /* Change background on scroll */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+  }
+  
+  .navbar-logo img {
+    height: 80px; /* Adjust logo size */
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: black; /* Adjust text color */
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .navbar-links a:hover {
+    color: #ff6347; /* Change to highlight color on hover */
+  }
+  
+  .navbar-icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .icon:hover {
+    color: #ff6347;
+  }
+  
+  .mobile-menu-btn {
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar-links {
+      display: none; /* Hidden by default for mobile */
+      position: absolute;
+      top: 60px; /* Adjust according to navbar height */
+      left: 0;
+      width: 100%;
+      flex-direction: column;
+      background-color: white;
+      padding: 20px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  
+    .navbar-links.active {
+      display: flex; /* Show when menu is active */
+    }
+  
+    .mobile-menu-btn {
+      display: block; /* Show on mobile screens */
+    }
+  }
+  
