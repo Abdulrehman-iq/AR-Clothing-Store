@@ -12,7 +12,7 @@ const HeroSection = () => {
           className="w-full h-full object-cover"
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 to-transparent"></div>
+<div className="absolute inset-0 bg-gradient-to-r from-primary-900/75 via-primary-500/10 to-transparent"></div>
       </div>
 
       {/* Circular gradient elements */}
