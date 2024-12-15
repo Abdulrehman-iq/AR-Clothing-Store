@@ -7,7 +7,7 @@ const Featured = () => {
     {
       id: 1,
       name: "Classic White Shirt",
-      price: "₹1,499",
+      price: "Rs,499",
       image: "/src/assets/C1.png",
       description: "Essential cotton blend formal shirt"
     },
@@ -21,28 +21,28 @@ const Featured = () => {
     {
       id: 3,
       name: "Printed Summer Shirt",
-      price: "₹1,799",
+      price: "Rs1,799",
       image: "/src/assets/C3.png",
       description: "Trendy printed summer collection"
     },
     {
       id: 4,
       name: "Printed Summer Shirt",
-      price: "₹1,799",
+      price: "Rs,799",
       image: "/src/assets/C4.png",
       description: "Trendy printed summer collection"
     },
     {
       id: 5,
       name: "Printed Summer Shirt",
-      price: "₹1,799",
+      price: "Rs 1,799",
       image: "/src/assets/C.png",
       description: "Trendy printed summer collection"
     },
     {
       id: 6,
       name: "Printed Summer Shirt",
-      price: "₹1,799",
+      price: "Rs1,799",
       image: "/src/assets/C6.png",
       description: "Trendy printed summer collection"
     }
