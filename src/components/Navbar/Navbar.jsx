@@ -31,7 +31,7 @@ const Navbar = () => {
             <Link to="/">
               <img 
                 className="h-20 w-auto transition-transform duration-300 hover:scale-105"
-                src="/src/assets/fyplogo.jpeg" 
+                src="/src/assets/fyplogo.png" 
                 alt="Store Logo" 
               />
             </Link>
