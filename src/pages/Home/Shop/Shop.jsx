@@ -1,11 +1,11 @@
 // components/Shop/Shop.jsx
 import React, { useState } from 'react';
-import { FiFilter, FiSearch, FiShoppingCart } from 'react-icons/fi';
+import { FiFilter, FiSearch } from 'react-icons/fi';
 import { useCart } from '../../../context/CartContext';
 import Navbar from '../../../components/Navbar/Navbar';
+import AddToCart from '../../../components/AddToCart/AddToCart';
 
 const Shop = () => {
-  const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('all');
   
   const categories = ['All', 'T-Shirts', 'Shirts', 'Hoodies'];
@@ -94,15 +94,7 @@ const Shop = () => {
                 <p className="text-content-light text-sm mb-3">{product.description}</p>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-primary-900">{product.price}</span>
-                  <button
-                    onClick={() => addToCart(product)}
-                    className="flex items-center space-x-2 px-4 py-2 bg-interactive-hover
-                             text-primary-900 rounded-full hover:bg-accent-light
-                             transition-colors duration-300"
-                  >
-                    <FiShoppingCart className="h-5 w-5" />
-                    <span>Add to Cart</span>
-                  </button>
+                  <AddToCart product={product} />
                 </div>
               </div>
             </div>

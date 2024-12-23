@@ -1,6 +1,8 @@
 // components/Featured/Featured.jsx
 import React from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
+import AddToCart from '../../AddToCart/AddToCart';
+
 
 const Featured = () => {
   const products = [

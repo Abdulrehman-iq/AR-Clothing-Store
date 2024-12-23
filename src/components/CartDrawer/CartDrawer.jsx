@@ -52,7 +52,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   />
                   <div className="flex-1">
                     <h3 className="text-surface-light font-medium">{item.name}</h3>
-                    <p className="text-content-light">₹{item.price}</p>
+                    <p className="text-content-light">{item.price}</p>
                     <div className="flex items-center space-x-2 mt-2">
                       <button 
                         className="p-1 text-content-light hover:text-interactive-hover"
@@ -86,7 +86,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center">
               <span className="text-surface-light">Total</span>
               <span className="text-surface-light font-semibold">
-                ₹{getCartTotal().toFixed(2)}
+                Rs{getCartTotal().toFixed(2)}
               </span>
             </div>
             <button
