@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <img src="/src/assets/Fyplogo.jpg" alt="Logo" className="h-12 w-auto" />
+            <img src="/src/assets/fyplogo.jpeg" alt="Logo" className="h-12 w-auto" />
             <p className="text-content-light">
               Your premier destination for fashion and style.
             </p>
@@ -66,7 +66,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-primary-700 mt-12 pt-8 text-center text-content-light">
-          <p>&copy; {new Date().getFullYear()} Your Store Name. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} AR Clothing Store. All rights reserved.</p>
         </div>
       </div>
     </footer>

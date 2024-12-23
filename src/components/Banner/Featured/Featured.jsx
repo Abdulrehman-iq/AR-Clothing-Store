@@ -27,21 +27,21 @@ const Featured = () => {
     },
     {
       id: 4,
-      name: "Printed Summer Shirt",
+      name: "Plain Winter Jersey",
       price: "Rs,799",
       image: "/src/assets/C4.png",
       description: "Trendy printed summer collection"
     },
     {
       id: 5,
-      name: "Printed Summer Shirt",
+      name: "Plain Winter jersey",
       price: "Rs 1,799",
-      image: "/src/assets/C.png",
+      image: "/src/assets/C5.png",
       description: "Trendy printed summer collection"
     },
     {
       id: 6,
-      name: "Printed Summer Shirt",
+      name: "Plain Winter Jersey",
       price: "Rs1,799",
       image: "/src/assets/C6.png",
       description: "Trendy printed summer collection"
