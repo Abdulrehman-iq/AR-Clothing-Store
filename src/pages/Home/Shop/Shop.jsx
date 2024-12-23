@@ -37,7 +37,7 @@ const Shop = () => {
       <div className="bg-primary-900 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl font-bold text-surface-light mb-4">Our Collection</h1>
-          <p className="text-content-light">Discover our curated selection of premium clothing</p>
+          <p className="text-content-light">Discover our selection of premium clothing</p>
         </div>
       </div>
 
