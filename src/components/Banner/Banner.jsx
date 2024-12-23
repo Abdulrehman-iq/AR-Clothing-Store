@@ -14,7 +14,7 @@ const Banner = () => {
       title: "Summer Collection",
       subtitle: "UP TO 50% OFF",
       description: "Discover the latest trends in summer fashion",
-      image: "/src/assets/tshirt1.jpg",
+      image: "/assets/tshirt1.jpg",
       buttonText: "Shop Now",
       link: "/shop"
     },
@@ -23,7 +23,7 @@ const Banner = () => {
       title: "New Arrivals",
       subtitle: "EXCLUSIVE OFFERS",
       description: "Be the first to explore our newest collections",
-      image: "/src/assets/tshirt2.jpg",
+      image: "/assets/tshirt2.jpg",
       buttonText: "Explore",
       link: "/new-arrivals"
     },
@@ -32,7 +32,7 @@ const Banner = () => {
       title: "Limited Edition",
       subtitle: "SPECIAL COLLECTION",
       description: "Premium designs for the fashion-forward",
-      image: "/src/assets/shirt3.jpg",
+      image: "/assets/shirt3.jpg",
       buttonText: "View Collection",
       link: "/collection"
     }

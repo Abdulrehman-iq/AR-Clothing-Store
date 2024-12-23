@@ -16,7 +16,7 @@ const Shop = () => {
       name: "Classic White Shirt",
       price: "Rs 1,499",
       category: "Shirts",
-      image: "/src/assets/C1.png",
+      image: "/assets/C1.png",
       description: "Essential cotton blend formal shirt"
     },
     {
@@ -24,7 +24,7 @@ const Shop = () => {
       name: "Plain Winter Jersey",
       price: "Rs 1,799",
       category: "Hoodies",
-      image: "/src/assets/C2.png",
+      image: "/assets/C2.png",
       description: "Warm and comfortable winter jersey"
     },
     // Add more products...

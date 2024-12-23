@@ -9,46 +9,47 @@ const Featured = () => {
     {
       id: 1,
       name: "Classic White Shirt",
-      price: "Rs,499",
-      image: "/src/assets/C1.png",
-      description: "Essential cotton blend formal shirt"
+      price: "Rs 499",
+      image: "/assets/C1.png", // Corrected path
+      description: "Essential cotton blend formal shirt",
     },
     {
       id: 2,
       name: "Denim Casual Shirt",
       price: "Rs 1,999",
-      image: "/src/assets/C2.png",
-      description: "Comfortable casual denim shirt"
+      image: "/assets/C2.png",
+      description: "Comfortable casual denim shirt",
     },
     {
       id: 3,
       name: "Printed Summer Shirt",
-      price: "Rs1,799",
-      image: "/src/assets/C3.png",
-      description: "Trendy printed summer collection"
+      price: "Rs 1,799",
+      image: "/assets/C3.png",
+      description: "Trendy printed summer collection",
     },
     {
       id: 4,
       name: "Plain Winter Jersey",
-      price: "Rs,799",
-      image: "/src/assets/C4.png",
-      description: "Trendy printed summer collection"
+      price: "Rs 799",
+      image: "/assets/C4.png",
+      description: "Trendy printed summer collection",
     },
     {
       id: 5,
       name: "Plain Winter jersey",
       price: "Rs 1,799",
-      image: "/src/assets/C5.png",
-      description: "Trendy printed summer collection"
+      image: "/assets/C5.png",
+      description: "Trendy printed summer collection",
     },
     {
       id: 6,
       name: "Plain Winter Jersey",
-      price: "Rs1,799",
-      image: "/src/assets/C6.png",
-      description: "Trendy printed summer collection"
-    }
+      price: "Rs 1,799",
+      image: "/assets/C6.png",
+      description: "Trendy printed summer collection",
+    },
   ];
+  
 
   return (
     <section className="py-16 bg-surface-default">

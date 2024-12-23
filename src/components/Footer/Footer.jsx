@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <img src="/src/assets/fyplogo.png" alt="Logo" className="h-20 w-auto" />
+            <img src="/assets/fyplogo.png" alt="Logo" className="h-20 w-auto" />
             <p className="text-content-light">
               Your premier destination where you try-on first.
             </p>
