@@ -1,13 +1,10 @@
 // components/Featured/Featured.jsx
 import React from 'react';
-import { FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import AddToCart from '../Buttons/AddToCart';
 import TryOnButton from '../Buttons/TryonButton';
 
 const Featured = () => {
-  const { addToCart } = useCart();
-
   const products = [
     {
       id: 1,
@@ -53,12 +50,6 @@ const Featured = () => {
     }
   ];
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    // Optional: Add toast notification
-    alert(`${product.name} added to cart!`);
-  };
-
   return (
     <section className="py-8 sm:py-16 bg-surface-default px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -95,15 +86,7 @@ const Featured = () => {
                     {product.price}
                   </span>
                   <div className="flex flex-row space-x-2 w-full sm:w-auto">
-                    <button 
-                      onClick={() => handleAddToCart(product)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-interactive-hover 
-                               text-primary-900 rounded-full hover:bg-accent-light 
-                               transition-colors duration-300"
-                    >
-                      <FiShoppingCart className="h-5 w-5" />
-                      <span>Add to Cart</span>
-                    </button>
+                    <AddToCart product={product} />
                     <TryOnButton />
                   </div>
                 </div>
