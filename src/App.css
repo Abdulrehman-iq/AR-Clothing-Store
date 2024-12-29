@@ -1,30 +1,139 @@
+/* Root styles */
 #root {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative; /* For proper stacking context */
+  position: relative;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
 }
 
+/* Logo styles */
 .logo {
   height: 6em;
   padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+  will-change: filter, transform;
+  transition: all 0.3s ease-in-out;
 }
 
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
+  transform: scale(1.05);
 }
 
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Utility classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+/* Sweet Alert customization */
+.swal2-popup {
+  border-radius: 1rem !important;
+  padding: 2rem !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.swal2-title {
+  font-size: 1.5rem !important;
+  color: #1a1a1a !important;
+  margin-bottom: 1rem !important;
+}
+
+.swal2-html-container {
+  margin: 1rem 0 !important;
+}
+
+/* Animations for notifications */
+@keyframes bounceIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  40% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
   }
+}
+
+.animated {
+  animation-duration: 0.7s;
+  animation-fill-mode: both;
+}
+
+.bounceIn {
+  animation-name: bounceIn;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Loading animation */
+.loading {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
