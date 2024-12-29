@@ -4,7 +4,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import HeroSection from '../../components/HeroSection/HeroSection';
 import Banner from '../../components/Banner/Banner';
-import Featured from '../../components/Banner/Featured/Featured.jsx';
+import Featured from '../../components/Featured/Featured.jsx';
 import AboutStore from '../../components/AboutStore/AboutStore.jsx';
 
 const Home = () => {

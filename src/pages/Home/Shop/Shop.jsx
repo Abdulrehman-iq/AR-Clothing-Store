@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { FiFilter, FiSearch } from 'react-icons/fi';
 import { useCart } from '../../../context/CartContext';
 import Navbar from '../../../components/Navbar/Navbar';
-import AddToCart from '../../../components/AddToCart/AddToCart';
+import AddToCart from '../../../components/Buttons/AddToCart';
+import TryOnButton from '../../../components/Buttons/TryonButton';
 
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -14,20 +15,51 @@ const Shop = () => {
     {
       id: 1,
       name: "Classic White Shirt",
-      price: "Rs 1,499",
+      price: "Rs 499",
       category: "Shirts",
       image: "/assets/C1.png",
       description: "Essential cotton blend formal shirt"
     },
     {
       id: 2,
+      name: "Denim Casual Shirt",
+      price: "Rs 1,999",
+      category: "Shirts",
+      image: "/assets/C2.png",
+      description: "Comfortable casual denim shirt"
+    },
+    {
+      id: 3,
+      name: "Printed Summer Shirt",
+      price: "Rs 1,799",
+      category: "Shirts",
+      image: "/assets/C3.png",
+      description: "Trendy printed summer collection"
+    },
+    {
+      id: 4,
       name: "Plain Winter Jersey",
+      price: "Rs 799",
+      category: "Hoodies",
+      image: "/assets/C4.png",
+      description: "Warm winter collection jersey"
+    },
+    {
+      id: 5,
+      name: "Classic Jersey",
       price: "Rs 1,799",
       category: "Hoodies",
-      image: "/assets/C2.png",
-      description: "Warm and comfortable winter jersey"
+      image: "/assets/C5.png",
+      description: "Premium cotton blend jersey"
     },
-    // Add more products...
+    {
+      id: 6,
+      name: "Casual Jersey",
+      price: "Rs 1,799",
+      category: "Hoodies",
+      image: "/assets/C6.png",
+      description: "Comfortable casual wear jersey"
+    }
   ];
 
   return (
@@ -37,7 +69,7 @@ const Shop = () => {
       <div className="bg-primary-900 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl font-bold text-surface-light mb-4">Our Collection</h1>
-          <p className="text-content-light">Discover our selection of premium clothing</p>
+          <p className="text-content-light">Discover our curated selection of premium clothing</p>
         </div>
       </div>
 
@@ -73,28 +105,31 @@ const Shop = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {products.map((product) => (
             <div
               key={product.id}
               className="bg-surface-light rounded-xl overflow-hidden shadow-lg hover:shadow-xl
                        transition-all duration-300 transform hover:-translate-y-1"
             >
-              <div className="aspect-w-3 aspect-h-4 relative overflow-hidden">
+              <div className="relative h-[400px] overflow-hidden">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-300
+                  className="w-full h-full object-contain p-4 transition-transform duration-300
                            hover:scale-105"
                 />
               </div>
 
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-primary-900">{product.name}</h3>
-                <p className="text-content-light text-sm mb-3">{product.description}</p>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-primary-900 mb-2">{product.name}</h3>
+                <p className="text-content-light mb-4">{product.description}</p>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-primary-900">{product.price}</span>
-                  <AddToCart product={product} />
+                  <div className="flex space-x-2">
+                    <AddToCart product={product} />
+                    <TryOnButton />
+                  </div>
                 </div>
               </div>
             </div>
