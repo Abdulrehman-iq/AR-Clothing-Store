@@ -48,9 +48,7 @@ const Navbar = () => {
             <Link to="/about" className="text-surface-light hover:text-interactive-hover transition-colors duration-300 font-medium text-xl">
               About Us
             </Link>
-            <Link to="/contact" className="text-surface-light hover:text-interactive-hover transition-colors duration-300 font-medium text-xl">
-              Contact
-            </Link>
+            
           </div>
 
           {/* Icons */}
@@ -92,9 +90,7 @@ const Navbar = () => {
             <Link to="/about" className="block px-3 py-2 text-surface-light hover:text-interactive-hover hover:bg-primary-800 rounded-md transition-all duration-300">
               About Us
             </Link>
-            <Link to="/contact" className="block px-3 py-2 text-surface-light hover:text-interactive-hover hover:bg-primary-800 rounded-md transition-all duration-300">
-              Contact
-            </Link>
+           
           </div>
         </div>
       </div>
