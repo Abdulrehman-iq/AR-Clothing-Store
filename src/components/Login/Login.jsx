@@ -1,7 +1,8 @@
+// components/Login/Login.jsx
 import React, { useState } from 'react';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -39,11 +40,20 @@ const Login = () => {
     const adminEmail = 'admin@gmail.com';
     const adminPassword = 'admin123';
 
+    // User login credentials
+    const userEmail = 'user@gmail.com';
+    const userPassword = 'user123';
+    const userName = 'Abdulrehman Iqbal'; // Example user name
+
     // Check if credentials are correct
     if (formData.email === adminEmail && formData.password === adminPassword) {
       localStorage.setItem('isAdmin', 'true'); // Set admin flag
       alert('Admin logged in successfully');
       window.location.href = '/admin'; // Redirect to admin dashboard
+    } else if (formData.email === userEmail && formData.password === userPassword) {
+      localStorage.setItem('user', JSON.stringify({ email: formData.email, name: userName })); // Store user info
+      alert('User logged in successfully');
+      onLogin({ email: formData.email, name: userName }); // Call onLogin to update parent state
     } else {
       alert('Invalid Credentials');
     }
