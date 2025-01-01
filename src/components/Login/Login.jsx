@@ -1,4 +1,3 @@
-// components/Login/Login.jsx
 import React, { useState } from 'react';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
@@ -15,7 +14,6 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear error when user starts typing
     if (errors[e.target.name]) {
       setErrors({
         ...errors,
@@ -26,18 +24,29 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     // Basic validation
     const newErrors = {};
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.password) newErrors.password = 'Password is required';
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    // Handle login logic here
-    console.log('Login attempt:', formData);
+    // Admin login credentials
+    const adminEmail = 'admin@gmail.com';
+    const adminPassword = 'admin123';
+
+    // Check if credentials are correct
+    if (formData.email === adminEmail && formData.password === adminPassword) {
+      localStorage.setItem('isAdmin', 'true'); // Set admin flag
+      alert('Admin logged in successfully');
+      window.location.href = '/admin'; // Redirect to admin dashboard
+    } else {
+      alert('Invalid Credentials');
+    }
   };
 
   return (
@@ -112,17 +121,6 @@ const Login = () => {
         >
           Login
         </button>
-
-        {/* Divider */}
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-primary-700"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-          </div>
-        </div>
-
-      
       </form>
     </div>
   );

@@ -8,6 +8,8 @@ import Checkout from './components/Checkout/Checkout';
 import Category from './components/Category/Category';
 import OrderSuccess from './components/OrderSuccess/OrderSuccess';
 import { CartProvider } from './context/CartContext';
+import Admin from './components/Admin/Admin';
+import UserProfile from './components/UserProfile/UserProfile';
 import './App.css';
 
 function App() {
@@ -23,6 +25,9 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/category/:categoryName" element={<Category />} />
               <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/profile" element={<UserProfile />} /> {/* Add user profile route */}
+
             </Routes>
           </div>
         </Router>
