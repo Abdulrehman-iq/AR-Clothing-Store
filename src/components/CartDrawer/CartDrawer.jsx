@@ -98,7 +98,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center">
               <span className="text-surface-light">Total</span>
               <span className="text-surface-light font-semibold">
-                ₹{getCartTotal().toFixed(2)}
+                Rs {getCartTotal().toFixed(2)}
               </span>
             </div>
             <button

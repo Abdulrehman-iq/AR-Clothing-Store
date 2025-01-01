@@ -172,7 +172,7 @@ const Checkout = () => {
               <div className="border-t border-primary-700 pt-4 mt-4">
                 <div className="flex justify-between text-surface-light">
                   <span>Subtotal</span>
-                  <span>₹{getCartTotal().toFixed(2)}</span>
+                  <span>Rs {getCartTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-surface-light mt-2">
                   <span>Shipping</span>
@@ -180,7 +180,7 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-surface-light font-bold mt-4 text-lg">
                   <span>Total</span>
-                  <span>₹{getCartTotal().toFixed(2)}</span>
+                  <span>Rs {getCartTotal().toFixed(2)}</span>
                 </div>
               </div>
             </div>
