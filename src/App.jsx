@@ -10,6 +10,7 @@ import OrderSuccess from './components/OrderSuccess/OrderSuccess';
 import { CartProvider } from './context/CartContext';
 import Admin from './components/Admin/Admin';
 import UserProfile from './components/UserProfile/UserProfile';
+import AboutStore  from './components/AboutStore/AboutStore'; // Import AboutStore component
 import './App.css';
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/about" element={<AboutStore />} /> {/* Add About page route */}
+
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/category/:categoryName" element={<Category />} />
               <Route path="/order-success" element={<OrderSuccess />} />
