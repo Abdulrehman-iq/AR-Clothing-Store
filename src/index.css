@@ -33,6 +33,8 @@ body {
   place-items: center;
   width: 100%;
   min-height: 100vh;
+  background-color: #f5f7fa; /* Replace with your desired color */
+
 }
 
 h1 {

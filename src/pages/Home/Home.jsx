@@ -12,6 +12,7 @@ const Home = () => {
     <div className="w-full min-h-screen overflow-x-hidden"> {/* Add overflow-x-hidden */}
       <Navbar />
       <HeroSection />
+      
       <Featured/>
       <Banner />  
       <AboutStore/>

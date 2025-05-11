@@ -56,7 +56,7 @@ const AddToCart = ({ product }) => {
     <button
       onClick={handleAddToCart}
       className="flex items-center space-x-2 px-4 py-2 bg-interactive-hover
-               text-primary-900 rounded-full hover:bg-accent-light
+               text-primary-500 rounded-full hover:bg-accent-light
                transition-all duration-300 hover:scale-105"
     >
       <FiShoppingCart className="h-5 w-5" />

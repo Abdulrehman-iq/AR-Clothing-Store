@@ -3,9 +3,24 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./", // Ensures relative paths work correctly in production
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'), // Keep /api in the path
+        secure: false
+      },
+      '/video-feed': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
+  base: "./",
   build: {
-    outDir: "dist", // Output directory for the build
-    assetsDir: "assets", // Directory for static assets
+    outDir: "dist",
+    assetsDir: "assets",
   },
 });
