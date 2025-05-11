@@ -205,68 +205,6 @@ const VirtualTryOn = ({ onClose }) => {
     }
   };
 
-  // Function to test connection and upload shirt images if necessary
-  const testConnection = async () => {
-    try {
-      // Test if the backend needs image uploads
-      logWithTimestamp('Testing backend capabilities...');
-      
-      const checkResponse = await fetch('http://localhost:5000/check_shirts', {
-        method: 'GET',
-      }).catch(() => ({ ok: false }));
-      
-      if (checkResponse.ok) {
-        const result = await checkResponse.json();
-        logWithTimestamp(`Server has ${result.count} shirts registered`);
-        
-        if (result.count < shirts.length) {
-          if (window.confirm(`The server only has ${result.count} shirts registered but you have ${shirts.length} shirts. Would you like to upload the shirt images to the server?`)) {
-            // Upload missing shirts
-            for (const shirt of shirts) {
-              logWithTimestamp(`Registering shirt: ${shirt.name}`);
-              await fetch('http://localhost:5000/register_shirt', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  shirt_id: shirt.id,
-                  shirt_name: shirt.name
-                  // The actual image would need to be uploaded as FormData
-                }),
-              });
-            }
-            alert('All shirts registered. Please restart the try-on session.');
-          }
-        }
-      } else {
-        logWithTimestamp('Server does not support shirt checking');
-      }
-      
-      // Test basic functionality
-      const startResponse = await fetch('http://localhost:5000/start_tryon', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ shirt_id: selectedShirt.id }),
-      });
-      
-      logWithTimestamp(`Start tryOn response: ${startResponse.status}`);
-      
-      const setResponse = await fetch('http://localhost:5000/set_shirt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ shirt_id: selectedShirt.id }),
-      });
-      
-      logWithTimestamp(`Set shirt response: ${setResponse.status}`);
-      
-      alert('Connection tests completed. Check console for results.');
-    } catch (error) {
-      logWithTimestamp(`Test connection error: ${error.message}`);
-      alert(`Test failed: ${error.message}`);
-    }
-  };
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center p-4">
       <button 
@@ -308,7 +246,7 @@ const VirtualTryOn = ({ onClose }) => {
             </div>
           )}
           
-          <div className="flex justify-center mb-6 space-x-3">
+          <div className="flex justify-center mb-6">
             <button 
               onClick={reopenVideoWindow}
               disabled={isConnecting}
@@ -316,13 +254,6 @@ const VirtualTryOn = ({ onClose }) => {
                         transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
             >
               {triedOn ? "Reopen Video Window" : "Open Video Window"}
-            </button>
-            
-            <button
-              onClick={testConnection}
-              className="px-4 py-2 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700"
-            >
-              Test Connection
             </button>
           </div>
           
