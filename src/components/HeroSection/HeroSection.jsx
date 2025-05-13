@@ -25,7 +25,7 @@ const HeroSection = () => {
           <div className="w-full md:w-1/2 space-y-8">
             <h1 className="text-5xl md:text-7xl font-bold text-left text-white 
                          bg-gradient-to-r from-white to-purple-200 bg-clip-text">
-              Discover Your Style 
+Discover Your Style While Trying It On
             </h1>
             <p className="text-xl md:text-2xl text-left text-purple-100">
               Elevate your wardrobe with our curated collection of timeless pieces
