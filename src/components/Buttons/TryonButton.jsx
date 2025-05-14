@@ -2,6 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { shirts } from '../Constants/Shirts';
 import { FiCamera, FiX, FiChevronLeft, FiChevronRight, FiRefreshCw, FiSliders } from 'react-icons/fi';
 
+// Read environment variables with defaults for Vite
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const DEFAULT_VIDEO_QUALITY = import.meta.env.VITE_DEFAULT_VIDEO_QUALITY || 'medium';
+const DEFAULT_FPS = parseInt(import.meta.env.VITE_DEFAULT_FPS || '15');
+const SESSION_ID = import.meta.env.VITE_SESSION_ID || 'frontend-session';
+
 const VirtualTryOn = ({ onClose }) => {
   const [selectedShirt, setSelectedShirt] = useState(shirts[0]);
   const [triedOn, setTriedOn] = useState(false);
@@ -13,6 +19,12 @@ const VirtualTryOn = ({ onClose }) => {
   const [measurementComplete, setMeasurementComplete] = useState(false);
   const [measurements, setMeasurements] = useState({});
   const [fitStyle, setFitStyle] = useState('regular');
+  
+  // Performance settings
+  const [videoQuality, setVideoQuality] = useState(DEFAULT_VIDEO_QUALITY);
+  const [maxFps, setMaxFps] = useState(DEFAULT_FPS);
+  const [showPerformanceSettings, setShowPerformanceSettings] = useState(false);
+  
   const tryOnActive = useRef(false);
   const videoWindow = useRef(null);
   const statusInterval = useRef(null);
@@ -49,7 +61,7 @@ const VirtualTryOn = ({ onClose }) => {
   // Check which shirts are available on the backend
   const checkAvailableShirts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/check_shirts');
+      const response = await fetch(`${API_BASE_URL}/check_shirts`);
       
       if (!response.ok) {
         throw new Error(`Failed to fetch available shirts: ${response.status}`);
@@ -85,7 +97,7 @@ const VirtualTryOn = ({ onClose }) => {
     
     try {
       // Check backend status first
-      const statusCheck = await fetch('http://localhost:5000/check_status', {
+      const statusCheck = await fetch(`${API_BASE_URL}/check_status`, {
         method: 'GET',
       }).catch(() => ({ ok: false }));
       
@@ -95,13 +107,15 @@ const VirtualTryOn = ({ onClose }) => {
       }
       
       // Start the measurement session
-      const response = await fetch('http://localhost:5000/start_measurement', {
+      const response = await fetch(`${API_BASE_URL}/start_measurement`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          session_id: 'frontend-session'
+          session_id: SESSION_ID,
+          video_quality: videoQuality,
+          max_fps: maxFps
         }),
       });
       
@@ -112,9 +126,9 @@ const VirtualTryOn = ({ onClose }) => {
       const data = await response.json().catch(() => ({}));
       logWithTimestamp('Measurement session started successfully');
       
-      // Now open video feed in a new window
+      // Now open video feed in a new window with performance parameters
       const timestamp = new Date().getTime();
-      const videoUrl = `http://localhost:5000/video_feed?t=${timestamp}&session_id=frontend-session`;
+      const videoUrl = `${API_BASE_URL}/video_feed?t=${timestamp}&session_id=${SESSION_ID}&quality=${videoQuality}&fps=${maxFps}`;
       
       videoWindow.current = window.open(
         videoUrl, 
@@ -134,7 +148,7 @@ const VirtualTryOn = ({ onClose }) => {
         
         statusInterval.current = setInterval(async () => {
           try {
-            const statusResponse = await fetch('http://localhost:5000/get_measurements');
+            const statusResponse = await fetch(`${API_BASE_URL}/get_measurements`);
             const statusData = await statusResponse.json();
             
             if (statusData.measurement_complete) {
@@ -206,13 +220,13 @@ const VirtualTryOn = ({ onClose }) => {
     }
     
     try {
-      await fetch('http://localhost:5000/stop_measurement', {
+      await fetch(`${API_BASE_URL}/stop_measurement`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          session_id: 'frontend-session'
+          session_id: SESSION_ID
         }),
       });
       logWithTimestamp('Try-on session stopped');
@@ -224,7 +238,7 @@ const VirtualTryOn = ({ onClose }) => {
   // Skip the measurement phase
   const skipMeasurement = async () => {
     try {
-      const response = await fetch('http://localhost:5000/skip_measurement', {
+      const response = await fetch(`${API_BASE_URL}/skip_measurement`, {
         method: 'POST',
       });
       
@@ -260,14 +274,14 @@ const VirtualTryOn = ({ onClose }) => {
       
       logWithTimestamp(`Updating shirt selection to: ${shirt.name} (${shirt.id})`);
       
-      const response = await fetch('http://localhost:5000/select_shirt', {
+      const response = await fetch(`${API_BASE_URL}/select_shirt`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           shirt_id: shirt.id,
-          session_id: 'frontend-session'
+          session_id: SESSION_ID
         }),
       });
       
@@ -291,7 +305,7 @@ const VirtualTryOn = ({ onClose }) => {
     try {
       setFitStyle(style);
       
-      const response = await fetch('http://localhost:5000/set_fit_style', {
+      const response = await fetch(`${API_BASE_URL}/set_fit_style`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -311,6 +325,17 @@ const VirtualTryOn = ({ onClose }) => {
     } catch (error) {
       logWithTimestamp(`Error updating fit style: ${error.message}`);
       return false;
+    }
+  };
+
+  // Update video quality settings
+  const updateVideoSettings = (quality, fps) => {
+    setVideoQuality(quality);
+    setMaxFps(fps);
+    
+    // If video is already running, reload it with new settings
+    if (videoWindow.current && !videoWindow.current.closed) {
+      reopenVideoWindow();
     }
   };
 
@@ -338,7 +363,7 @@ const VirtualTryOn = ({ onClose }) => {
     }
     
     // Restart the measurement process
-    await fetch('http://localhost:5000/reset_measurement', {
+    await fetch(`${API_BASE_URL}/reset_measurement`, {
       method: 'POST',
     });
     
@@ -363,10 +388,10 @@ const VirtualTryOn = ({ onClose }) => {
       // If in try-on phase, just reopen the window with current shirt
       await updateShirtSelection(selectedShirt.id);
       
-      // Open a new window
+      // Open a new window with quality parameters
       const timestamp = new Date().getTime();
       videoWindow.current = window.open(
-        `http://localhost:5000/video_feed?t=${timestamp}&session_id=frontend-session`, 
+        `${API_BASE_URL}/video_feed?t=${timestamp}&session_id=${SESSION_ID}&quality=${videoQuality}&fps=${maxFps}`, 
         'VirtualTryOn', 
         'width=960,height=720,menubar=no,toolbar=no,location=no'
       );
@@ -416,13 +441,64 @@ const VirtualTryOn = ({ onClose }) => {
           return (
             <div key={key} className="flex justify-between">
               <span className="text-gray-300">{label}:</span>
-              <span className="text-white font-medium">{typeof value === 'number' ? value.toFixed(1) : value} inches</span>
+              <span className="text-white font-medium">{typeof value === 'number' ? value.toFixed(1) : value} cm</span>
             </div>
           );
         })}
       </div>
     );
   };
+
+  // Performance Settings UI component
+  const PerformanceSettings = () => (
+    <div className="mt-4 p-4 bg-gray-900 rounded-lg">
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-white text-sm font-medium">Video Performance Settings</h3>
+        <button 
+          onClick={() => setShowPerformanceSettings(false)}
+          className="text-gray-400 hover:text-white"
+        >
+          <FiX size={18} />
+        </button>
+      </div>
+      
+      <div className="mb-3">
+        <p className="text-gray-300 text-xs mb-1">Video Quality:</p>
+        <div className="flex space-x-2">
+          {['low', 'medium', 'high'].map(quality => (
+            <button
+              key={quality}
+              onClick={() => updateVideoSettings(quality, maxFps)}
+              className={`px-3 py-1 text-xs rounded-full transition-colors
+                        ${videoQuality === quality 
+                          ? 'bg-blue-500 text-white' 
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+            >
+              {quality.charAt(0).toUpperCase() + quality.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <div>
+        <p className="text-gray-300 text-xs mb-1">Max Frame Rate:</p>
+        <div className="flex space-x-2">
+          {[10, 15, 24, 30].map(fps => (
+            <button
+              key={fps}
+              onClick={() => updateVideoSettings(videoQuality, fps)}
+              className={`px-3 py-1 text-xs rounded-full transition-colors
+                        ${maxFps === fps 
+                          ? 'bg-blue-500 text-white' 
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+            >
+              {fps} FPS
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center p-4">
@@ -435,11 +511,22 @@ const VirtualTryOn = ({ onClose }) => {
       
       <div className="relative w-full max-w-4xl">
         <div className="p-6 bg-gray-800 rounded-lg shadow-lg">
-          <h2 className="text-2xl text-white mb-4 text-center">
-            {isMeasuring 
-              ? "Body Measurement" 
-              : "Virtual Try-On"}
-          </h2>
+          {/* Header section */}
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl text-white">
+              {isMeasuring ? "Body Measurement" : "Virtual Try-On"}
+            </h2>
+            <button
+              onClick={() => setShowPerformanceSettings(!showPerformanceSettings)}
+              className="flex items-center space-x-1 px-3 py-1 bg-gray-700 text-xs text-white rounded-full hover:bg-gray-600"
+            >
+              <FiSliders size={14} />
+              <span>Performance</span>
+            </button>
+          </div>
+          
+          {/* Show performance settings if toggled */}
+          {showPerformanceSettings && <PerformanceSettings />}
           
           {backendStatus && (
             <div className="mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-500 rounded-md">

@@ -11,33 +11,33 @@ const Featured = () => {
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10 sm:mb-14 text-primary-900">
           Featured Products
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-12 lg:gap-14">
           {shirts.map((product) => (
             <div 
               key={product.id} 
               className="bg-surface-light rounded-xl overflow-hidden shadow-lg hover:shadow-xl 
                        transition-all duration-300 transform hover:-translate-y-1 flex flex-col
-                       w-full max-w-md mx-auto"
+                       w-full max-w-md mx-auto min-h-[650px]"
             >
-              {/* Image Container - Increased height and width */}
-              <div className="relative h-[380px] sm:h-[420px] lg:h-[480px] overflow-hidden">
+              {/* Image Container - Adjusted for consistent sizing */}
+              <div className="relative h-[340px] sm:h-[380px] lg:h-[400px] overflow-hidden">
                 <img 
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-contain p-6 transition-transform duration-300 
+                  className="w-full h-full object-contain p-4 transition-transform duration-300 
                            hover:scale-105"
                 />
               </div>
 
-              {/* Content - Added more padding and improved spacing */}
-              <div className="p-6 sm:p-8 space-y-5 sm:space-y-6 flex-grow">
-                <h3 className="text-xl sm:text-2xl font-semibold text-primary-900">
+              {/* Content - Increased vertical space for buttons and popup content */}
+              <div className="p-6 sm:p-8 space-y-4 sm:space-y-5 flex-grow flex flex-col">
+                <h3 className="text-xl font-semibold text-primary-900">
                   {product.name}
                 </h3>
-                <p className="text-sm sm:text-base text-content-light">
+                <p className="text-sm text-content-light flex-grow">
                   {product.description}
                 </p>
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 pt-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 pt-4 mt-auto">
                   <span className="text-xl font-bold text-primary-900">
                     {product.price || "Rs 1,799"}
                   </span>
