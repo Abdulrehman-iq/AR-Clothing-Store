@@ -1,8 +1,9 @@
-// components/SignUp/SignUp.jsx
 import React, { useState } from 'react';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
-const SignUp = () => {
+// Add onSignupSuccess prop here
+const SignUp = ({ onSignupSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -36,7 +37,35 @@ const SignUp = () => {
       return;
     }
 
-    console.log('SignUp attempt:', formData);
+    // Get existing users from localStorage
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    // Check if email already exists
+    if (existingUsers.some(user => user.email === formData.email)) {
+      setErrors({ email: 'Email already registered' });
+      return;
+    }
+    
+    // Create new user object
+    const newUser = {
+      id: Date.now().toString(),
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      registeredOn: new Date().toISOString()
+    };
+    
+    // Add to users array and save back to localStorage
+    existingUsers.push(newUser);
+    localStorage.setItem('users', JSON.stringify(existingUsers));
+    
+    // Alert success and switch to login tab
+    alert('Registration successful! Please login with your credentials.');
+    
+    // Use the onSignupSuccess prop to switch to login tab
+    if (onSignupSuccess) {
+      onSignupSuccess();
+    }
   };
 
   return (
@@ -134,9 +163,22 @@ const SignUp = () => {
             <div className="w-full border-t border-primary-700"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            </div>
+          </div>
         </div>
 
+        {/* Login Link - now switches tab instead of navigating */}
+        <div className="text-center mt-4">
+          <p className="text-content-light">
+            Already have an account?{' '}
+            <button 
+              type="button"
+              onClick={onSignupSuccess} 
+              className="text-interactive-hover hover:underline"
+            >
+              Login here
+            </button>
+          </p>
+        </div>
       </form>
     </div>
   );

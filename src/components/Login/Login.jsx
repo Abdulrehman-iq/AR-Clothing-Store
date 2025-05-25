@@ -2,13 +2,15 @@
 import React, { useState } from 'react';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, onRegisterClick }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -21,11 +23,14 @@ const Login = ({ onLogin }) => {
         [e.target.name]: ''
       });
     }
+    // Clear any general login error when user starts typing again
+    if (loginError) setLoginError('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setLoginError('');
+    
     // Basic validation
     const newErrors = {};
     if (!formData.email) newErrors.email = 'Email is required';
@@ -36,32 +41,63 @@ const Login = ({ onLogin }) => {
       return;
     }
 
-    // Admin login credentials
-    const adminEmail = 'admin@gmail.com';
-    const adminPassword = 'admin123';
+    setIsLoading(true);
 
-    // User login credentials
-    const userEmail = 'user@gmail.com';
-    const userPassword = 'user123';
-    const userName = 'Abdulrehman Iqbal'; // Example user name
+    // Simulate network request with a small delay
+    setTimeout(() => {
+      // Admin login credentials
+      const adminEmail = 'admin@gmail.com';
+      const adminPassword = 'admin123';
 
-    // Check if credentials are correct
-    if (formData.email === adminEmail && formData.password === adminPassword) {
-      localStorage.setItem('isAdmin', 'true'); // Set admin flag
-      alert('Admin logged in successfully');
-      window.location.href = '/admin'; // Redirect to admin dashboard
-    } else if (formData.email === userEmail && formData.password === userPassword) {
-      localStorage.setItem('user', JSON.stringify({ email: formData.email, name: userName })); // Store user info
-      alert('User logged in successfully');
-      onLogin({ email: formData.email, name: userName }); // Call onLogin to update parent state
-    } else {
-      alert('Invalid Credentials');
-    }
+      // Check if admin credentials
+      if (formData.email === adminEmail && formData.password === adminPassword) {
+        localStorage.setItem('isAdmin', 'true'); // Set admin flag
+        localStorage.setItem('user', JSON.stringify({ 
+          email: adminEmail,
+          name: 'Admin',
+          isAdmin: true
+        }));
+        onLogin({ email: adminEmail, name: 'Admin', isAdmin: true });
+        window.location.href = '/admin'; // Redirect to admin dashboard
+        return;
+      }
+
+      // Check registered users in localStorage
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(user => user.email === formData.email);
+      
+      if (user && user.password === formData.password) {
+        // Save to current user in localStorage for ProfileDrawer
+        localStorage.setItem('user', JSON.stringify({ 
+          email: user.email, 
+          name: user.name,
+          id: user.id 
+        }));
+        // Also save to currentUser for other components that might use it
+        localStorage.setItem('currentUser', JSON.stringify({ 
+          email: user.email, 
+          name: user.name,
+          id: user.id 
+        }));
+        setIsLoading(false);
+        onLogin({ email: user.email, name: user.name });
+      } else {
+        setIsLoading(false);
+        setLoginError('Invalid credentials or user not registered');
+      }
+    }, 600);
   };
 
   return (
     <div className="w-full px-4 py-6">
       <h2 className="text-2xl font-bold text-surface-light mb-6">Welcome Back</h2>
+      
+      {loginError && (
+        <div className="mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-500 text-red-500 rounded-lg">
+          {loginError}
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Field */}
         <div>
@@ -79,6 +115,7 @@ const Login = ({ onLogin }) => {
                        border ${errors.email ? 'border-red-500' : 'border-primary-700'}
                        focus:outline-none focus:border-interactive-hover transition-colors`}
               placeholder="Enter your email"
+              disabled={isLoading}
             />
           </div>
           {errors.email && (
@@ -102,6 +139,7 @@ const Login = ({ onLogin }) => {
                        border ${errors.password ? 'border-red-500' : 'border-primary-700'}
                        focus:outline-none focus:border-interactive-hover transition-colors`}
               placeholder="Enter your password"
+              disabled={isLoading}
             />
             <button
               type="button"
@@ -126,11 +164,38 @@ const Login = ({ onLogin }) => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 bg-interactive-hover text-primary-900 rounded-lg font-medium
-                   hover:bg-accent-light transition-colors duration-300"
+          disabled={isLoading}
+          className={`w-full py-3 relative ${
+            isLoading 
+              ? 'bg-interactive-muted cursor-not-allowed' 
+              : 'bg-interactive-hover hover:bg-accent-light cursor-pointer'
+          } text-primary-900 rounded-lg font-medium transition-colors duration-300`}
         >
-          Login
+          {isLoading ? (
+            <>
+              <span className="opacity-0">Login</span>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-5 w-5 border-2 border-primary-900 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            </>
+          ) : (
+            'Login'
+          )}
         </button>
+        
+        {/* Register Link - Modified to use onRegisterClick */}
+        <div className="text-center mt-4">
+          <p className="text-content-light">
+            Don't have an account?{' '}
+            <button 
+              type="button"
+              onClick={onRegisterClick}
+              className="text-interactive-hover hover:underline"
+            >
+              Register here
+            </button>
+          </p>
+        </div>
       </form>
     </div>
   );

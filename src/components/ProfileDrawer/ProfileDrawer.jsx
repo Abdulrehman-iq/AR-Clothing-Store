@@ -82,9 +82,9 @@ const ProfileDrawer = ({ isOpen, onClose }) => {
 
         {/* Render Form */}
         <div className="p-6">
-          {!isLoggedIn && activeTab === 'login' && <Login onLogin={handleLogin} />}
-          {!isLoggedIn && activeTab === 'signup' && <SignUp />}
-        </div>
+  {!isLoggedIn && activeTab === 'login' && <Login onLogin={handleLogin} />}
+  {!isLoggedIn && activeTab === 'signup' && <SignUp onSignupSuccess={() => setActiveTab('login')} />}
+</div>
       </div>
     </>
   );
