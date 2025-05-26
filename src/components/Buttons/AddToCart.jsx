@@ -3,6 +3,7 @@ import React from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const AddToCart = ({ product, customClasses = '' }) => {
   const { addToCart, openCart } = useCart();
@@ -17,13 +18,14 @@ const AddToCart = ({ product, customClasses = '' }) => {
       toast: true,
       position: 'bottom-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 4000,
       timerProgressBar: true,
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%)',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
       color: '#334155',
+      showCloseButton: true, // Add close button
       didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
       }
     });
 
@@ -34,10 +36,11 @@ const AddToCart = ({ product, customClasses = '' }) => {
       html: `
         <div class="flex items-center gap-4 p-2">
           <img src="${product.image}" alt="${product.name}" 
-               class="w-16 h-16 object-cover rounded-lg shadow-sm"/>
+               class="w-16 h-16 object-cover rounded-lg shadow-sm border border-gray-100"/>
           <div class="text-left">
             <p class="font-medium text-slate-700">${product.name}</p>
             <p class="text-sm text-slate-600">${typeof product.price === 'number' ? 'Rs ' + product.price.toLocaleString() : product.price}</p>
+             
           </div>
         </div>
       `,
@@ -48,9 +51,18 @@ const AddToCart = ({ product, customClasses = '' }) => {
         popup: 'animate__animated animate__fadeOutDown animate__faster'
       },
       customClass: {
-        popup: 'colored-toast shadow-lg border border-gray-100',
-        title: 'text-xl font-bold text-slate-800',
-        timerProgressBar: 'bg-emerald-400'
+        popup: 'colored-toast shadow-xl border border-gray-100 rounded-lg',
+        title: 'text-lg font-bold text-slate-800',
+        timerProgressBar: 'bg-emerald-400',
+        closeButton: 'text-slate-400 hover:text-slate-600 focus:outline-none',
+        container: 'toast-container'
+      },
+      // Add global function to handle "View Cart" button click
+      willOpen: () => {
+        window.viewCart = () => {
+          Toast.close();
+          openCart();
+        }
       }
     });
   };
