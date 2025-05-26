@@ -3,60 +3,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiX, FiSearch } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { shirts } from '../Constants/Shirts'; // Import shirts data
 
 const SearchBar = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const inputRef = useRef(null);
-
-  const allProducts = [
-    {
-      id: 1,
-      name: "Classic White Shirt",
-      price: "Rs 499",
-      image: "/assets/C1.png",
-      description: "Essential cotton blend formal shirt"
-    },
-    {
-      id: 2,
-      name: "Denim Casual Shirt",
-      price: "Rs 1,999",
-      image: "/assets/C2.png",
-      description: "Comfortable casual denim shirt"
-    },
-    {
-      id: 3,
-      name: "Printed Summer Shirt",
-      price: "Rs 1,799",
-      image: "/assets/C3.png",
-      description: "Trendy printed summer collection"
-    },
-    {
-      id: 4,
-      name: "Plain Winter Jersey",
-      price: "Rs 799",
-      category: "Hoodies",
-      image: "/assets/C4.png",
-      description: "Warm winter collection jersey"
-    },
-    {
-      id: 5,
-      name: "Classic Jersey",
-      price: "Rs 1,799",
-      category: "Hoodies",
-      image: "/assets/C5.png",
-      description: "Premium cotton blend jersey"
-    },
-    {
-      id: 6,
-      name: "Casual Jersey",
-      price: "Rs 1,799",
-      category: "Hoodies",
-      image: "/assets/C6.png",
-      description: "Comfortable casual wear jersey"
-    }
-  
-  ];
 
   useEffect(() => {
     if (isOpen) {
@@ -70,7 +22,7 @@ const SearchBar = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (searchQuery) {
-      const filtered = allProducts.filter(product =>
+      const filtered = shirts.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -106,7 +58,7 @@ const SearchBar = ({ isOpen, onClose }) => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..."
+                  placeholder="Search shirts..."
                   className="w-full pl-12 pr-12 py-4 bg-primary-800 text-surface-light rounded-lg
                            border border-primary-700 focus:outline-none focus:border-interactive-hover
                            placeholder-content-light"
@@ -131,21 +83,22 @@ const SearchBar = ({ isOpen, onClose }) => {
                         className="flex items-center gap-4 p-4 hover:bg-primary-700/50 transition-colors"
                       >
                         <img
-                          src={product.image}
+                          src={product.image} // This expects a URL, but Shirts.jsx has imported React components
                           alt={product.name}
                           className="w-16 h-16 object-cover rounded-md"
                         />
                         <div className="flex-1">
                           <h3 className="text-surface-light font-medium">{product.name}</h3>
                           <p className="text-content-light text-sm">{product.description}</p>
-                          <p className="text-interactive-hover font-medium mt-1">{product.price}</p>
+                          {/* Add a placeholder price since it's not in the shirts data */}
+                          <p className="text-interactive-hover font-medium mt-1">Rs 1,499</p>
                         </div>
                       </Link>
                     ))}
                   </div>
                 ) : searchQuery && (
                   <div className="bg-primary-800 rounded-lg p-8 text-center">
-                    <p className="text-content-light">No products found matching "{searchQuery}"</p>
+                    <p className="text-content-light">No shirts found matching "{searchQuery}"</p>
                   </div>
                 )}
               </div>

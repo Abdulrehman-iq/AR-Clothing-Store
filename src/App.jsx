@@ -10,7 +10,8 @@ import OrderSuccess from './components/OrderSuccess/OrderSuccess';
 import { CartProvider } from './context/CartContext';
 import Admin from './components/Admin/Admin';
 import UserProfile from './components/UserProfile/UserProfile';
-import AboutStore  from './components/AboutStore/AboutStore'; // Import AboutStore component
+import AboutStore  from './components/AboutStore/AboutStore';
+import ProductDetails from './components/ProductDetails/ProductDetails';
 import './App.css';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
+<Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/about" element={<AboutStore />} /> {/* Add About page route */}
 
               <Route path="/checkout" element={<Checkout />} />

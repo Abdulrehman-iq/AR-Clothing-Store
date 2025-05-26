@@ -4,10 +4,13 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import Swal from 'sweetalert2';
 
-const AddToCart = ({ product }) => {
-  const { addToCart } = useCart();
+const AddToCart = ({ product, customClasses = '' }) => {
+  const { addToCart, openCart } = useCart();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.preventDefault();  // Prevent default button behavior
+    e.stopPropagation(); // Prevent event bubbling to parent elements
+    
     addToCart(product);
     
     const Toast = Swal.mixin({
@@ -34,7 +37,7 @@ const AddToCart = ({ product }) => {
                class="w-16 h-16 object-cover rounded-lg shadow-sm"/>
           <div class="text-left">
             <p class="font-medium text-slate-700">${product.name}</p>
-            <p class="text-sm text-slate-600">${product.price}</p>
+            <p class="text-sm text-slate-600">${typeof product.price === 'number' ? 'Rs ' + product.price.toLocaleString() : product.price}</p>
           </div>
         </div>
       `,
@@ -54,10 +57,11 @@ const AddToCart = ({ product }) => {
 
   return (
     <button
+      type="button" // Explicitly set button type
       onClick={handleAddToCart}
-      className="flex items-center space-x-2 px-4 py-2 bg-interactive-hover
+      className={`flex items-center space-x-2 px-4 py-2 bg-interactive-hover
                text-primary-500 rounded-full hover:bg-accent-light
-               transition-all duration-300 hover:scale-105"
+               transition-all duration-300 hover:scale-105 ${customClasses}`}
     >
       <FiShoppingCart className="h-5 w-5" />
       <span>Add to Cart</span>

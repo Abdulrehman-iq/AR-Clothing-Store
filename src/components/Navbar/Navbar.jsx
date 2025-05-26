@@ -5,13 +5,16 @@ import { FiShoppingCart, FiSearch, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import CartDrawer from '../CartDrawer/CartDrawer';
 import ProfileDrawer from '../ProfileDrawer/ProfileDrawer';
 import SearchBar from '../SearchBar/SearchBar';
+import { useCart } from '../../context/CartContext'; // Import useCart
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  
+  // Get cart functions from context
+  const { openCart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,7 +74,7 @@ const Navbar = () => {
               <FiSearch className="h-7 w-7 text-surface-light hover:text-interactive-hover transition-colors duration-300" />
             </div>
             <div
-              onClick={() => setIsCartOpen(true)}
+              onClick={openCart} // Use openCart from context instead of local state
               className="cursor-pointer"
             >
               <FiShoppingCart className="h-7 w-7 text-surface-light hover:text-interactive-hover transition-colors duration-300" />
@@ -118,7 +121,7 @@ const Navbar = () => {
 
       {/* Drawers */}
       <SearchBar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <CartDrawer /> {/* Remove isOpen and onClose props */}
       <ProfileDrawer isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
     </nav>
   );

@@ -4,12 +4,12 @@ import { FiX, FiTrash2, FiMinus, FiPlus } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
-const CartDrawer = ({ isOpen, onClose }) => {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
+const CartDrawer = () => {
+  const { isOpen, closeCart, cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-    onClose();
+    closeCart();
     navigate('/checkout');
   };
 
@@ -19,7 +19,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
       <div 
         className={`fixed inset-0 bg-primary-900/50 backdrop-blur-sm transition-opacity duration-300 z-50 
           ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={onClose}
+        onClick={closeCart}
       />
 
       {/* Cart Drawer */}
@@ -32,7 +32,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         <div className="flex justify-between items-center p-6 border-b border-primary-700">
           <h2 className="text-xl font-semibold text-surface-light">Your Cart</h2>
           <button 
-            onClick={onClose}
+            onClick={closeCart}
             className="text-surface-light hover:text-interactive-hover transition-colors duration-300"
           >
             <FiX className="h-6 w-6" />
@@ -45,7 +45,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <div className="flex flex-col items-center justify-center h-full">
               <p className="text-content-light text-lg mb-4">Your cart is empty</p>
               <button
-                onClick={onClose}
+                onClick={closeCart}
                 className="px-6 py-2 bg-interactive-hover text-primary-900 rounded-full
                          hover:bg-accent-light transition-colors duration-300"
               >
@@ -63,7 +63,11 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   />
                   <div className="flex-1">
                     <h3 className="text-surface-light font-medium">{item.name}</h3>
-                    <p className="text-content-light">{item.price}</p>
+                    <p className="text-content-light">
+                      {typeof item.price === 'number' 
+                        ? `Rs ${item.price.toLocaleString()}` 
+                        : item.price}
+                    </p>
                     <div className="flex items-center space-x-2 mt-2">
                       <button 
                         className="p-1 text-content-light hover:text-interactive-hover"
@@ -98,7 +102,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center">
               <span className="text-surface-light">Total</span>
               <span className="text-surface-light font-semibold">
-                Rs {getCartTotal().toFixed(2)}
+                Rs {getCartTotal().toLocaleString()}
               </span>
             </div>
             <button

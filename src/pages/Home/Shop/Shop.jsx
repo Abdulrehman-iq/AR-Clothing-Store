@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import Navbar from '../../../components/Navbar/Navbar';
 import Footer from '../../../components/Footer/Footer';
@@ -6,8 +7,10 @@ import AddToCart from '../../../components/Buttons/AddToCart';
 import TryOnButton from '../../../components/Buttons/TryonButton';
 import SearchBar from '../../../components/SearchBar/SearchBar';
 import Filter from '../../../components/Filter/Filter';
+import { shirts } from '../../../components/Constants/Shirts';
 
 const Shop = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -16,73 +19,29 @@ const Shop = () => {
   });
 
   const categories = ['All', 'T-Shirts', 'Shirts', 'Hoodies'];
-
-  const products = [
-    {
-      id: 1,
-      name: "Classic White Shirt",
-      price: "Rs 499",
-      category: "Shirts",
-      image: "/assets/C1.png",
-      description: "Essential cotton blend formal shirt",
-      color: "green",
-    },
-    {
-      id: 2,
-      name: "Denim Casual Shirt",
-      price: "Rs 1999",
-      category: "Shirts",
-      image: "/assets/C2.png",
-      description: "Comfortable casual denim shirt",
-      color: "blue",
-    },
-    {
-      id: 3,
-      name: "Printed Summer Shirt",
-      price: "Rs 1799",
-      category: "Shirts",
-      image: "/assets/C3.png",
-      description: "Trendy printed summer collection",
-      color: "red",
-    },
-    {
-      id: 4,
-      name: "Plain Winter Jersey",
-      price: "Rs 799",
-      category: "Hoodies",
-      image: "/assets/C4.png",
-      description: "Warm winter collection jersey",
-      color: "green",
-    },
-    {
-      id: 5,
-      name: "Classic Jersey",
-      price: "Rs 1799",
-      category: "Hoodies",
-      image: "/assets/C5.png",
-      description: "Premium cotton blend jersey",
-      color: "black",
-    },
-    {
-      id: 6,
-      name: "Casual Jersey",
-      price: "Rs 1799",
-      category: "Hoodies",
-      image: "/assets/C6.png",
-      description: "Comfortable casual wear jersey",
-      color: "white",
-    },
-  ];
+  
+  const handleProductClick = (productId) => {
+    navigate(`/products/${productId}`);
+  };
+  
+  const handleButtonClick = (e) => {
+    e.stopPropagation(); // Prevent navigation when clicking buttons
+  };
 
   // Filtered products based on category, price, and color
-  const filteredProducts = products.filter((product) => {
-    const isCategoryMatch =
-      selectedCategory === 'all' || product.category.toLowerCase() === selectedCategory;
+  const filteredProducts = shirts.filter((product) => {
+    const isCategoryMatch = selectedCategory === 'all' || 
+      (selectedCategory === 'shirts' && (product.id.startsWith('C1') || product.id.startsWith('C2') || product.id.startsWith('C3'))) ||
+      (selectedCategory === 'hoodies' && (product.id.startsWith('C4') || product.id.startsWith('C5') || product.id.startsWith('C6')));
+    
     const isPriceMatch =
-      parseInt(product.price.replace('Rs ', '')) >= filters.priceRange[0] &&
-      parseInt(product.price.replace('Rs ', '')) <= filters.priceRange[1];
+      product.price >= filters.priceRange[0] &&
+      product.price <= filters.priceRange[1];
+      
+    // You may need to add a color property to your shirts data
     const isColorMatch =
-      filters.colors.length === 0 || filters.colors.includes(product.color);
+      filters.colors.length === 0 || 
+      (product.color && filters.colors.includes(product.color));
 
     return isCategoryMatch && isPriceMatch && isColorMatch;
   });
@@ -134,8 +93,9 @@ const Shop = () => {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
+              onClick={() => handleProductClick(product.id)}
               className="bg-surface-light rounded-xl overflow-hidden shadow-lg hover:shadow-xl 
-                       transition-all duration-300 transform hover:-translate-y-1"
+                       transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
             >
               <div className="relative h-[400px] overflow-hidden">
                 <img
@@ -148,11 +108,11 @@ const Shop = () => {
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-primary-900 mb-2">{product.name}</h3>
                 <p className="text-content-light mb-4">{product.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-primary-900">{product.price}</span>
+                <div className="flex justify-between items-center" onClick={handleButtonClick}>
+                  <span className="text-lg font-bold text-primary-900">Rs {product.price.toLocaleString()}</span>
                   <div className="flex space-x-2">
-                    <AddToCart product={product} />
-                    <TryOnButton />
+                    <AddToCart product={product} preventNavigation={true} />
+                    <TryOnButton shirtImage={product.image} shirtName={product.name} />
                   </div>
                 </div>
               </div>
