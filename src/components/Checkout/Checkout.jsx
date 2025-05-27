@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { FiCreditCard, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
+import { FiCreditCard, FiMapPin, FiPhone, FiMail, FiUser, FiArrowLeft, FiCheckCircle, FiX } from 'react-icons/fi';
 
 const Checkout = () => {
-  const { cartItems, getCartTotal } = useCart();
+  const { cartItems, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -20,8 +22,38 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle order submission
-    navigate('/order-success');
+    setIsSubmitting(true);
+    
+    // Create a new order object
+    const newOrder = {
+      id: Date.now(), // Use timestamp as a simple ID
+      user: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      items: cartItems,
+      total: getCartTotal(),
+      status: 'pending',
+      orderDate: new Date().toISOString(),
+      paymentMethod: formData.paymentMethod
+    };
+    
+    // Get existing orders from localStorage or initialize empty array
+    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    
+    // Add new order to array
+    const updatedOrders = [...existingOrders, newOrder];
+    
+    // Save updated orders array back to localStorage
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+    
+    // Show success message
+    setShowSuccess(true);
+    
+    // Clear the cart
+    clearCart();
+    
+    // No longer automatically navigate
   };
 
   const handleInputChange = (e) => {
@@ -31,10 +63,48 @@ const Checkout = () => {
     });
   };
 
+  const handleGoBack = () => {
+    navigate(-1); // Go back to previous page
+  };
+
+  const closeSuccessMessage = () => {
+    setShowSuccess(false);
+  };
+
   return (
     <div className="min-h-screen pt-28 pb-12 bg-primary-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-surface-light mb-8">Checkout</h1>
+        {/* Success Message Overlay */}
+        {showSuccess && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-primary-900 bg-opacity-90">
+            <div className="bg-primary-800 p-6 rounded-xl shadow-xl flex flex-col items-center relative">
+              {/* Close button */}
+              <button 
+                onClick={closeSuccessMessage}
+                className="absolute top-2 right-2 text-content-light hover:text-surface-light"
+                aria-label="Close message"
+              >
+                <FiX className="w-6 h-6" />
+              </button>
+              
+              <FiCheckCircle className="text-green-500 w-16 h-16 mb-4" />
+              <h2 className="text-2xl font-bold text-surface-light mb-2">Order Placed Successfully!</h2>
+              <p className="text-content-light">Thank you for your purchase.</p>
+            </div>
+          </div>
+        )}
+        
+        {/* Back button and title row */}
+        <div className="flex items-center mb-8">
+          <button 
+            onClick={handleGoBack}
+            className="mr-4 text-surface-light hover:text-interactive-hover transition-colors"
+            aria-label="Go back"
+          >
+            <FiArrowLeft className="h-6 w-6" />
+          </button>
+          <h1 className="text-3xl font-bold text-surface-light">Checkout</h1>
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Checkout Form */}
@@ -140,10 +210,12 @@ const Checkout = () => {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-interactive-hover text-primary-900 rounded-lg font-medium
-                         hover:bg-accent-light transition-colors duration-300"
+                disabled={isSubmitting}
+                className={`w-full py-4 ${
+                  isSubmitting ? 'bg-gray-500' : 'bg-interactive-hover hover:bg-accent-light'
+                } text-primary-900 rounded-lg font-medium transition-colors duration-300`}
               >
-                Place Order
+                {isSubmitting ? 'Processing...' : 'Place Order'}
               </button>
             </form>
           </div>
@@ -165,14 +237,16 @@ const Checkout = () => {
                       <p className="text-content-light">Quantity: {item.quantity}</p>
                     </div>
                   </div>
-                  <p className="text-surface-light font-medium">{item.price}</p>
+                  <p className="text-surface-light font-medium">
+                    {typeof item.price === 'number' ? `Rs ${item.price.toLocaleString()}` : item.price}
+                  </p>
                 </div>
               ))}
 
               <div className="border-t border-primary-700 pt-4 mt-4">
                 <div className="flex justify-between text-surface-light">
                   <span>Subtotal</span>
-                  <span>Rs {getCartTotal().toFixed(2)}</span>
+                  <span>Rs {getCartTotal().toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-surface-light mt-2">
                   <span>Shipping</span>
@@ -180,7 +254,7 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-surface-light font-bold mt-4 text-lg">
                   <span>Total</span>
-                  <span>Rs {getCartTotal().toFixed(2)}</span>
+                  <span>Rs {getCartTotal().toLocaleString()}</span>
                 </div>
               </div>
             </div>

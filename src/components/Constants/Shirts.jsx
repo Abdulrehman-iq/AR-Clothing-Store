@@ -26,8 +26,8 @@ export const shirts = [
     name: 'Modern Blue Shirt',
     image: C2,
     price: 1999,
-    description: 'Comfortable blue casual shirt suited for both work and leisure.',
-    longDescription: 'Our Modern Blue Casual Shirt bridges the gap between professional and casual wear. The contemporary cut and versatile blue shade make it easy to dress up with slacks for the office or down with jeans for a weekend outing. The slight stretch in the fabric ensures comfort throughout your day.',
+    description: 'sional and casual wear. The contemporary cut and versatile blComfortable blue casual shirt suited for both work and leisure.',
+    longDescription: 'Our Modern Blue Casual Shirt bridges the gap between profesue shade make it easy to dress up with slacks for the office or down with jeans for a weekend outing. The slight stretch in the fabric ensures comfort throughout your day.',
     details: {
       material: '95% Cotton, 5% Elastane',
       fit: 'Slim fit',

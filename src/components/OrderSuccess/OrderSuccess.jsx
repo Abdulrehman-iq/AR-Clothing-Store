@@ -1,19 +1,30 @@
-// components/OrderSuccess/OrderSuccess.jsx
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { FiCheck, FiArrowRight } from 'react-icons/fi';
 
 const OrderSuccess = () => {
   const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
   
   useEffect(() => {
+    // Get order details from localStorage
+    const currentOrder = localStorage.getItem('currentOrder');
+    if (currentOrder) {
+      setOrder(JSON.parse(currentOrder));
+    }
+    
     // Trigger confetti effect
     confetti({
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 }
     });
+    
+    // Clear current order from localStorage after displaying
+    return () => {
+      localStorage.removeItem('currentOrder');
+    };
   }, []);
 
   return (
@@ -40,7 +51,9 @@ const OrderSuccess = () => {
             </h2>
             <div className="space-y-2 text-left">
               <p className="text-content-light">
-                Order Number: <span className="text-surface-light">#ORD12345</span>
+                Order Number: <span className="text-surface-light">
+                  {order ? `#${order.orderNumber}` : '#ORD12345'}
+                </span>
               </p>
               <p className="text-content-light">
                 Estimated Delivery: <span className="text-surface-light">3-5 Business Days</span>

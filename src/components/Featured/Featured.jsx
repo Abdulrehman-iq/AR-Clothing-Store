@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import AddToCart from '../Buttons/AddToCart';
 import TryOnButton from '../Buttons/TryonButton';
-import { shirts } from '../Constants/Shirts.jsx';
+import { shirts as initialShirts } from '../Constants/Shirts.jsx';
 
 const Featured = () => {
   const navigate = useNavigate();
+  const [shirts, setShirts] = useState([]);
+
+  // Load shirts from localStorage (where admin panel saves them) or use initial data
+  useEffect(() => {
+    const savedShirts = localStorage.getItem('shirts');
+    if (savedShirts) {
+      setShirts(JSON.parse(savedShirts));
+    } else {
+      setShirts(initialShirts);
+    }
+  }, []);
 
   const handleProductClick = (productId) => {
     navigate(`/products/${productId}`);
   };
   
   const handleButtonClick = (e) => {
-    e.stopPropagation(); // Prevent navigation when clicking buttons
+    e.stopPropagation(); 
   };
 
   return (

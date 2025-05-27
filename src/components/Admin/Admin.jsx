@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiPieChart, FiUsers, FiPackage, FiShoppingBag, FiLogOut } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserManagement from './UserManagement';
 import OrderManagement from './OrderManagement';
 import ProductManagement from './ProductManagement';
@@ -8,26 +8,44 @@ import ProductManagement from './ProductManagement';
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
+  const [adminName, setAdminName] = useState('Admin');
 
-  const stats = {
-    totalOrders: 120,
-    totalUsers: 75,
-    totalProducts: 40,
-    totalRevenue: 'Rs 62,000',
-  };
+  // Get admin name if available in localStorage
+  useEffect(() => {
+    const storedName = localStorage.getItem('adminName');
+    if (storedName) {
+      setAdminName(storedName);
+    }
+  }, []);
 
   const handleLogout = () => {
+    // Remove admin status from localStorage
     localStorage.removeItem('isAdmin');
-    navigate('/'); // Redirect to home page
+    
+    // Dispatch both events for reliability
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('admin-logout'));
+    
+    // Redirect to home page
+    navigate('/');
   };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-primary-900 text-white flex flex-col">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold">Admin Panel</h1>
+        {/* Logo with Link to Home */}
+        <div className="p-4 flex flex-col items-center border-b border-primary-800">
+          <Link to="/" className="mb-2">
+            <img
+              className="h-16 w-auto transition-transform duration-300 hover:scale-105"
+              src="/assets/fyplogo.png"
+              alt="AR Clothing Store Logo"
+            />
+          </Link>
+          <h1 className="text-xl font-bold">Admin Panel</h1>
         </div>
+        
         <nav className="mt-4 flex-grow overflow-y-auto">
           <button
             className={`w-full flex items-center px-4 py-3 hover:bg-primary-800 transition ${
@@ -78,25 +96,16 @@ const Admin = () => {
       {/* Main Content */}
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
         {activeTab === 'overview' && (
-          <section>
-            <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white p-4 rounded shadow">
-                <h3 className="text-black">Total Orders</h3>
-                <p className="text-xl font-bold text-black">{stats.totalOrders}</p>
-              </div>
-              <div className="bg-white p-4 rounded shadow">
-                <h3 className="text-black">Total Users</h3>
-                <p className="text-xl font-bold text-black">{stats.totalUsers}</p>
-              </div>
-              <div className="bg-white p-4 rounded shadow">
-                <h3 className="text-black">Total Products</h3>
-                <p className="text-xl font-bold text-black">{stats.totalProducts}</p>
-              </div>
-              <div className="bg-white p-4 rounded shadow">
-                <h3 className="text-black">Revenue</h3>
-                <p className="text-xl font-bold text-black">{stats.totalRevenue}</p>
-              </div>
+          <section className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Welcome to the Admin Dashboard</h2>
+            <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+              <p className="text-xl text-gray-700 mb-2">
+                Hello, <span className="font-semibold">{adminName}</span>!
+              </p>
+              <p className="text-gray-600 leading-relaxed">
+                Welcome to the AR Clothing Store admin panel. Use the sidebar navigation to manage your store's 
+                users, products, and orders. You can also return to the main store at any time by clicking the logo.
+              </p>
             </div>
           </section>
         )}

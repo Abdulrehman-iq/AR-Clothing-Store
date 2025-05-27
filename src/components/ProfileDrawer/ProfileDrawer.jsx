@@ -1,7 +1,7 @@
 // components/ProfileDrawer/ProfileDrawer.jsx
 import React, { useState, useEffect } from 'react';
-import { FiX, FiSettings, FiUser } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { FiX, FiSettings, FiUser, FiLayout } from 'react-icons/fi';
+import { useNavigate, Link } from 'react-router-dom';
 import Login from '../Login/Login';
 import SignUp from '../Signup/Signup';
 
@@ -9,27 +9,39 @@ const ProfileDrawer = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('login');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
+    const adminStatus = localStorage.getItem('isAdmin') === 'true';
+    
     if (user) {
       setIsLoggedIn(true);
       setUserInfo(user);
+      setIsAdmin(adminStatus || user.isAdmin);
     }
   }, []);
 
   const handleLogin = (user) => {
     setIsLoggedIn(true);
     setUserInfo(user);
+    setIsAdmin(user.isAdmin || localStorage.getItem('isAdmin') === 'true');
     onClose();
   };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('isAdmin');
     setIsLoggedIn(false);
     setUserInfo(null);
+    setIsAdmin(false);
     navigate('/');
+  };
+
+  const handleAdminDashboardClick = () => {
+    navigate('/admin');
+    onClose();
   };
 
   return (
@@ -68,23 +80,48 @@ const ProfileDrawer = ({ isOpen, onClose }) => {
             ))}
           </div>
         ) : (
-          <div className="flex items-center gap-2 mt-20 px-6 border-b border-primary-700">
-            <FiUser className="text-surface-light" />
-            <span className="text-surface-light">{userInfo?.name}</span>
-            <button
-              onClick={handleLogout}
-              className="ml-auto px-3 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded"
-            >
-              Logout
-            </button>
+          <div className="flex flex-col mt-20 px-6 border-b border-primary-700 pb-4">
+            <div className="flex items-center gap-2">
+              <FiUser className="text-surface-light" />
+              <span className="text-surface-light">{userInfo?.name}</span>
+              <button
+                onClick={handleLogout}
+                className="ml-auto px-3 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded"
+              >
+                Logout
+              </button>
+            </div>
+            
+            {/* Admin Dashboard Link - only shown for admin users */}
+            {isAdmin && (
+              <button 
+                onClick={handleAdminDashboardClick}
+                className="flex items-center gap-2 text-interactive-hover hover:text-accent-light mt-3 self-start"
+              >
+                <FiLayout />
+                Admin Dashboard
+              </button>
+            )}
           </div>
         )}
 
         {/* Render Form */}
         <div className="p-6">
-  {!isLoggedIn && activeTab === 'login' && <Login onLogin={handleLogin} />}
-  {!isLoggedIn && activeTab === 'signup' && <SignUp onSignupSuccess={() => setActiveTab('login')} />}
-</div>
+          {!isLoggedIn && activeTab === 'login' && <Login onLogin={handleLogin} onRegisterClick={() => setActiveTab('signup')} />}
+          {!isLoggedIn && activeTab === 'signup' && <SignUp onSignupSuccess={() => setActiveTab('login')} />}
+          
+          {isLoggedIn && (
+            <div className="text-surface-light">
+              <h3 className="text-xl font-semibold mb-4">My Account</h3>
+              <div className="space-y-4">
+                <p>Welcome back, {userInfo?.name}</p>
+                <div className="flex flex-col space-y-2">
+               
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
