@@ -1,6 +1,6 @@
 // components/Admin/ProductManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlus, FiRefreshCw } from 'react-icons/fi';
 import { shirts as initialShirts } from '../Constants/Shirts';
 
 const ProductManagement = () => {
@@ -122,16 +122,41 @@ const ProductManagement = () => {
     alert('Product data has been reset to default');
   };
 
+  // New function to reset product positions
+  const handleResetPositions = () => {
+    // Sort products by ID (assuming IDs like C1, C2, C3)
+    const sortedProducts = [...products].sort((a, b) => {
+      // Extract numeric parts from IDs for proper numeric sorting
+      const numA = parseInt(a.id.replace('C', ''));
+      const numB = parseInt(b.id.replace('C', ''));
+      return numA - numB;
+    });
+    
+    setProducts(sortedProducts);
+    localStorage.setItem('shirts', JSON.stringify(sortedProducts));
+    alert('Products have been reordered to their default positions');
+  };
+
   return (
     <div className="bg-primary-800 p-6 rounded-lg shadow-lg mt-4">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-semibold text-surface-light">Product Management</h3>
-        <button 
-          onClick={handleReset}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        >
-          Reset to Default
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={handleResetPositions}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center gap-2"
+          >
+            <FiRefreshCw size={16} />
+            Reset Positions
+          </button>
+          
+          <button 
+            onClick={handleReset}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+          >
+            Reset to Default
+          </button>
+        </div>
       </div>
 
       <form onSubmit={handleAddProduct} className="space-y-4 bg-primary-700 p-6 rounded-lg">
