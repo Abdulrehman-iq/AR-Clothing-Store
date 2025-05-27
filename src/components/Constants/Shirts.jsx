@@ -6,25 +6,11 @@ import C5 from '../../assets/Images/C5.png';
 import C6 from '../../assets/Images/C6.png';
 
 export const shirts = [
+  
   {
     id: 'C1',
-    name: 'Classic Green Shirt',
-    image: C1,
-    price: 1499,
-    description: 'Casual green shirt perfect for relaxed outings or everyday wear.',
-    longDescription: 'This versatile green casual shirt combines comfort with style, featuring a relaxed fit and breathable fabric that makes it perfect for any casual occasion. The subtle texture adds visual interest while maintaining everyday wearability. Made from high-quality cotton, it provides all-day comfort while looking great.',
-    details: {
-      material: '100% Cotton',
-      fit: 'Regular fit',
-      care: 'Machine wash cold, tumble dry low'
-    },
-    reviews: [
-    ]
-  },
-  {
-    id: 'C2',
     name: 'Modern Blue Shirt',
-    image: C2,
+    image: C1,
     price: 1999,
     description: 'sional and casual wear. The contemporary cut and versatile blComfortable blue casual shirt suited for both work and leisure.',
     longDescription: 'Our Modern Blue Casual Shirt bridges the gap between profesue shade make it easy to dress up with slacks for the office or down with jeans for a weekend outing. The slight stretch in the fabric ensures comfort throughout your day.',
@@ -36,6 +22,21 @@ export const shirts = [
     reviews: [
       { id: 1, rating: 5, user: 'Michael T.', comment: 'Perfect for casual Fridays at work! Gets compliments every time.' },
       { id: 2, rating: 4, user: 'David L.', comment: 'Fits great and good quality. The slim fit is flattering but not too tight.' }
+    ]
+  },
+  {
+    id: 'C2',
+    name: 'Classic Green Shirt',
+    image: C2,
+    price: 1499,
+    description: 'Casual green shirt perfect for relaxed outings or everyday wear.',
+    longDescription: 'This versatile green casual shirt combines comfort with style, featuring a relaxed fit and breathable fabric that makes it perfect for any casual occasion. The subtle texture adds visual interest while maintaining everyday wearability. Made from high-quality cotton, it provides all-day comfort while looking great.',
+    details: {
+      material: '100% Cotton',
+      fit: 'Regular fit',
+      care: 'Machine wash cold, tumble dry low'
+    },
+    reviews: [
     ]
   },
   {
